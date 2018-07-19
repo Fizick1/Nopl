@@ -2,4 +2,4 @@ package anotation
 
 @Target(AnnotationTarget.FIELD)
 @MustBeDocumented
-annotation class Name(val name : String)
+annotation class TableName(val name: String)
