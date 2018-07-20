@@ -28,6 +28,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'com.github.Fizick1:Nopl:master'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17'
 
