@@ -8,6 +8,8 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        implementation 'com.github.Fizick1:Nopl:master'
+
     }
 }
 
