@@ -8,8 +8,6 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        implementation 'com.github.Fizick1:Nopl:master'
-
     }
 }
 
@@ -23,12 +21,9 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
-    maven { url 'https://jitpack.io' }
-
 }
 
 dependencies {
-    implementation 'com.github.Fizick1:Nopl:master'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17'
 
@@ -40,4 +35,9 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
 }
