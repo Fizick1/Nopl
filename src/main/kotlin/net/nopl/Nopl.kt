@@ -26,7 +26,7 @@ class Nopl {
      *
      *  @return File
      */
-    private fun saveWorckBook(fileName: String): File {
+    private fun saveWorkBook(fileName: String): File {
         val file = File("$fileName.xlsx")
         FileOutputStream(file).use { this.workbook.write(it) }
         return file
@@ -51,7 +51,7 @@ class Nopl {
             else
                 WriteToSXSSFSheet(wb).EmptyRow
         }
-        saveWorckBook(obj::class.java.name)
+        saveWorkBook(obj::class.java.name)
     }
 
     /**
