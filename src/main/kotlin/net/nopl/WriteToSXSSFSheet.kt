@@ -4,11 +4,26 @@ import org.apache.poi.xssf.streaming.SXSSFRow
 import org.apache.poi.xssf.streaming.SXSSFSheet
 
 
-class WriteToSXSSFSheet(private val sheet: SXSSFSheet) {
+class WriteToSXSSFSheet(private val sheet: SXSSFSheet) : Parsing {
+
     /**
      *  Empty line
      */
-    val EmptyRow = SXSSFRow(this.sheet)
+    val EmptyRow: SXSSFRow
+        get() = SXSSFRow(this.sheet)
+
+
+    internal fun write(list: Collection<*>, startCell: StartCell) {
+        val obj = list.firstOrNull() ?: return
+        writeColumnNames(getColumns(obj), startCell)
+
+        list.forEachIndexed { index, it ->
+            if (it != null)
+                writeTableValues(getRowValueList(it), StartCell(startCell.startColumn, startCell.startRow + index))
+            else
+                EmptyRow
+        }
+    }
 
     /**
      *  Preparing to record values.

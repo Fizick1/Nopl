@@ -1,24 +1,11 @@
 package net.nopl
 
-import net.nopl.anotation.Output
-import net.nopl.anotation.TableName
+import org.apache.poi.xssf.streaming.SXSSFSheet
 import org.apache.poi.xssf.streaming.SXSSFWorkbook
 import java.io.File
 import java.io.FileOutputStream
 
-
 class Nopl {
-
-    /**
-     *  A workbook in which data will be recorded.
-     */
-    private val workbook: SXSSFWorkbook = SXSSFWorkbook()
-
-    /**
-     *  Array separator
-     */
-    private val arraySeparator = " , "
-
 
     /**
      *  Saves the created workbook to a file.
@@ -26,80 +13,50 @@ class Nopl {
      *
      *  @return File
      */
-    private fun saveWorkBook(fileName: String): File {
+    private fun saveWorkBook(workbook: SXSSFWorkbook, fileName: String): File {
         val file = File("$fileName.xlsx")
-        FileOutputStream(file).use { this.workbook.write(it) }
+        FileOutputStream(file).use { workbook.write(it) }
         return file
     }
 
     /**
-     *  Preparation of the object for recording, the names of the columns and their data are recorded separately,
-     *      so it is important to keep the order.
-     *  @param list
-     *  @param startCell
+     *  Writing data to the workbook, a new workbook is created, into which the record will be created.
+     *  @param list     in collection format
+     *  @param startCell    coordinates of the new table
      *
      */
     fun writeTable(list: Collection<*>, startCell: StartCell = StartCell()) {
-        val wb = workbook.createSheet("test")
+        val sxssfWorkbook = SXSSFWorkbook()
         val obj = list.firstOrNull() ?: return
-
-        WriteToSXSSFSheet(wb).writeColumnNames(getColumns(obj), startCell)
-
-        list.forEachIndexed { index, it ->
-            if (it != null)
-                WriteToSXSSFSheet(wb).writeTableValues(getRowValueList(it), StartCell(startCell.startColumn, startCell.startRow + index))
-            else
-                WriteToSXSSFSheet(wb).EmptyRow
-        }
-        saveWorkBook(obj::class.java.name)
+        val wb = sxssfWorkbook.createSheet(obj::class.java.name)
+        WriteToSXSSFSheet(wb).write(list, startCell)
+        saveWorkBook(sxssfWorkbook, obj::class.java.name)
     }
 
     /**
-     *  Retrieving column values from an object,
-     *      if you do not want the values to be displayed,
-     *      mark them with the annotation "@Output", and they will not be taken into account.
+     * Writing data to the workbook. When you send your own workbook,
+     *  a new page will be created in which the recording will take place.
+     * @param list      in collection format
+     * @param workbook      workbook
+     * @param startCell     coordinates of the new table
      *
-     * @param obj object in which column values are stored
-     *
-     * @return List<String>
      */
-    private fun getColumns(obj: Any) = obj::class.java.declaredFields.filter { field ->
-        field.isAccessible = true
-        val tableOutput = field.annotations.find { it is Output }
-        tableOutput == null || (tableOutput as Output).output
-    }.map { field ->
-        field.isAccessible = true
-        val tableNameAnotation = field.annotations.find { it is TableName }
-        if (tableNameAnotation != null)
-            (tableNameAnotation as TableName).name
-        else
-            field.name
+    fun writeTable(list: Collection<*>, workbook: SXSSFWorkbook, startCell: StartCell = StartCell()) {
+        val obj = list.firstOrNull() ?: return
+        val wb = workbook.createSheet(obj::class.java.name)
+        WriteToSXSSFSheet(wb).write(list, startCell)
     }
 
     /**
-     *  Retrieving the column names from the object,
-     *      if you do not want the columns to be displayed,
-     *      mark them with annotation "@Output" and they will not be taken into account.
+     * The new data will be added to the existing sheet, so as not to spoil the existing data on the sheet,
+     *      specify the coordinates of the desired cell (the count starts with 0).
+     *      If you overlay one data to another, the old ones will be retouched
      *
-     *  @param obj object in which column names are stored
-     *
-     *  @return List<String>
-     *
-     *  @see Output
+     * @param list      in collection format
+     * @param workSheet     worksheet
+     * @param startCell     coordinates of the new table
      */
-    private fun getRowValueList(obj: Any) = obj::class.java.declaredFields.filter { field ->
-        field.isAccessible = true
-        val tableOutput = field.annotations.find { it is Output }
-        tableOutput == null || (tableOutput as Output).output
-    }.map { field ->
-        field.isAccessible = true
-        val value = field.get(obj)
-        when (value) {
-            is String -> value.toString()
-            is Char -> value.toString()
-            is Number -> value.toString()
-            is Collection<*> -> value.joinToString(separator = arraySeparator)
-            else -> "Unknown type"
-        }
+    fun writeTable(list: Collection<*>, workSheet: SXSSFSheet, startCell: StartCell = StartCell()) {
+        WriteToSXSSFSheet(workSheet).write(list, startCell)
     }
 }
