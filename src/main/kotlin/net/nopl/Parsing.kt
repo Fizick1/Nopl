@@ -1,7 +1,7 @@
 package net.nopl
 
+import net.nopl.anotation.ColumnName
 import net.nopl.anotation.Output
-import net.nopl.anotation.TableName
 
 
 interface Parsing {
@@ -27,9 +27,9 @@ interface Parsing {
         tableOutput == null || (tableOutput as Output).output
     }.map { field ->
         field.isAccessible = true
-        val tableNameAnotation = field.annotations.find { it is TableName }
+        val tableNameAnotation = field.annotations.find { it is ColumnName }
         if (tableNameAnotation != null)
-            (tableNameAnotation as TableName).name
+            (tableNameAnotation as ColumnName).name
         else
             field.name
     }
