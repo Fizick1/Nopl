@@ -20,7 +20,7 @@ Use this setup for Maven:
   <dependency>
 	    <groupId>com.github.Fizick1</groupId>
 	    <artifactId>Nopl</artifactId>
-	    <version>v0.1.1</version>
+	    <version>v0.2.0</version>
 	</dependency>
 ```
 and for Gradle:
@@ -32,7 +32,7 @@ and for Gradle:
 	}
   
   dependencies {
-	        implementation 'com.github.Fizick1:Nopl:v0.1.1'
+	        implementation 'com.github.Fizick1:Nopl:v0.2.0'
 	}
 ```
 
