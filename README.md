@@ -2,6 +2,10 @@
 [![Build Status](https://travis-ci.com/Fizick1/Nopl.svg?branch=master)](https://travis-ci.com/Fizick1/Nopl)
 [![](https://jitpack.io/v/Fizick1/Nopl.svg)](https://jitpack.io/#Fizick1/Nopl)
 
+This library is a wrapper over [poi.apache](https://poi.apache.org/) . With this library, you can write your java.class to an Excel file. You do not have to do a lot of actions to write data.
+>code in the examples is written in the language of kotlin
+
+
 ## How it works
 ### Building with JitPack
 Use this setup for Maven:
