@@ -3,7 +3,7 @@ jdk:
   - oraclejdk8
   - openjdk8
 script:
-  - ./gradlew clean build
+  - ./gradlew clean fatJar
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 before_cache:
